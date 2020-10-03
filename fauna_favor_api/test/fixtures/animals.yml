@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  primaryCommonName: MyString
+  scientificName: MyString
+  iucn: MyString
+  order: MyString
+  family: MyString
+  genus: MyString
+  barriers: MyString
+  justification: MyString
+
+two:
+  primaryCommonName: MyString
+  scientificName: MyString
+  iucn: MyString
+  order: MyString
+  family: MyString
+  genus: MyString
+  barriers: MyString
+  justification: MyString
