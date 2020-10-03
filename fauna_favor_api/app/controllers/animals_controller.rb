@@ -9,27 +9,26 @@ class AnimalsController < ApplicationController
     $i = 0
     $num = 5
 
-    render json: {
-      "primaryCommonName": "Common Checkered-Skipper",
-      "scientificName": "Pyrgus communis",
-      "iucn": "Not Available",
-      "order": "Hesperiidae",
-      "family": "Lepidoptera",
-      "genus": "Pyrgus",
-      "barriers": "Not Available",
-      "justification": "Most species"
-    }
+    # render json: {
+    #   "primaryCommonName": "Common Checkered-Skipper",
+    #   "scientificName": "Pyrgus communis",
+    #   "iucn": "Not Available",
+    #   "order": "Hesperiidae",
+    #   "family": "Lepidoptera",
+    #   "genus": "Pyrgus",
+    #   "barriers": "Not Available",
+    #   "justification": "Most species"
+    # }
 
-    return
+    # return
 
     while $i < $num do
       # response = Faraday.get "https://explorer.natureserve.org/api/data/taxon/ELEMENT_GLOBAL.2.#{random}"
 
       if response != nil && response.status == 200
         parsed_json = JSON(response.body)
-        puts response
-        #puts response.body
-        #puts parsed_json
+
+
         info = {
           'primaryCommonName' => parsed_json['primaryCommonName'] || '',
           'scientificName' => parsed_json['scientificName'] || '',
@@ -49,10 +48,70 @@ class AnimalsController < ApplicationController
   end
 
   def search() 
-    search = params['search_param']
-    render json: search
-    return
+    url = 'https://explorer.natureserve.org/api/data/speciesSearch'
+    body = {
+      "criteriaType" => "species",
+      "textCriteria" => [ 
+        {
+        "paramType" => "textSearch",
+        "searchToken" => params['search_param'],
+        "matchAgainst" => "allNames",
+        "operator" => "contains"
+        }
+      ]
+    }
+
+    response = Faraday.post(url, body.to_json, "Content-Type" => "application/json")
+
+    if response != nil && response.status == 200
+      puts response
+      
+      parsed = JSON(response.body)
+
+      results = parsed['results'].map { |parsed_json| {
+        'primaryCommonName' => parsed_json['primaryCommonName'] || '',
+        'scientificName' => parsed_json['scientificName'] || '',
+        'iucn' => parsed_json.dig('iucn', 'iucnDescEn') || 'Not Available',
+        'order' => parsed_json.dig('speciesGlobal', 'family') || 'Not Available',
+        'family' => parsed_json.dig('speciesGlobal', 'taxorder') || 'Not Available',
+        'genus' => parsed_json.dig('speciesGlobal', 'genus') || 'Not Available',
+        'barriers' => parsed_json.dig('occurrenceDelineations', 0, 'separationBarriers') || 'Not Available',
+        'justification' => parsed_json.dig('occurrenceDelineations', 0, 'separationJustification') || 'Not Available'
+      }
+    }
+
+      render json: results
+    end
   end
+
+
+
+  #     method: 'post',
+  #     body: JSON.stringify(
+  #   }),
+  #   headers: {'Content-Type: application/json'}
+  #   }
+  # end
+  # if search != nil && response.status == 200
+  #   parsed_json = JSON(search.body)
+  #   puts response
+  #   #puts response.body
+  #   #puts parsed_json
+  #   info = {
+  #     'primaryCommonName' => parsed_json['primaryCommonName'] || '',
+  #     'scientificName' => parsed_json['scientificName'] || '',
+  #     'iucn' => parsed_json.dig('iucn', 'iucnDescEn') || 'Not Available',
+  #     'order' => parsed_json.dig('speciesGlobal', 'family') || 'Not Available',
+  #     'family' => parsed_json.dig('speciesGlobal', 'taxorder') || 'Not Available',
+  #     'genus' => parsed_json.dig('speciesGlobal', 'genus') || 'Not Available',
+  #     'barriers' => parsed_json.dig('occurrenceDelineations', 0, 'separationBarriers') || 'Not Available',
+  #     'justification' => parsed_json.dig('occurrenceDelineations', 0, 'separationJustification') || 'Not Available'
+  #   }
+  #   puts response.body
+  #   render json: info
+  #   return
+  # end
+  # end
 
   # def search ()
   #   GoogleSearch.api_key = process.env.api_key
