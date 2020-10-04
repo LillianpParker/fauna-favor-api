@@ -1,5 +1,4 @@
 require 'faraday'
-# require 'google_search_results' 
 require 'json'
 
 class AnimalsController < ApplicationController
