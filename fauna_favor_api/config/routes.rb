@@ -7,4 +7,5 @@ Rails.application.routes.draw do
   get '/animals/search/:search_param', to: 'animals#search'
   post '/animals/favorites', to: 'favorites#create'
   get '/favorites', to: 'favorites#index'
+  # get '/animals' to: 'image#search'
 end

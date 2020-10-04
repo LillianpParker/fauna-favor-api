@@ -1,6 +1,7 @@
 class Favorite < ApplicationRecord
     include Mongoid::Document
 
+    # field :img_link, type: String
     field :primaryCommonName, type: String
     field :scientificName, type: String
     field :order, type: String

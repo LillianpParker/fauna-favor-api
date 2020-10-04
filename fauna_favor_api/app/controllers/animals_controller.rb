@@ -23,11 +23,10 @@ class AnimalsController < ApplicationController
     return
 
     while $i < $num do
-      # response = Faraday.get "https://explorer.natureserve.org/api/data/taxon/ELEMENT_GLOBAL.2.#{random}"
+      response = Faraday.get "https://explorer.natureserve.org/api/data/taxon/ELEMENT_GLOBAL.2.#{random}"
 
       if response != nil && response.status == 200
         parsed_json = JSON(response.body)
-
 
         info = {
           'primaryCommonName' => parsed_json['primaryCommonName'] || '',
@@ -83,41 +82,6 @@ class AnimalsController < ApplicationController
       render json: results
     end
   end
-
-
-
-  #     method: 'post',
-  #     body: JSON.stringify(
-  #   }),
-  #   headers: {'Content-Type: application/json'}
-  #   }
-  # end
-  # if search != nil && response.status == 200
-  #   parsed_json = JSON(search.body)
-  #   puts response
-  #   #puts response.body
-  #   #puts parsed_json
-  #   info = {
-  #     'primaryCommonName' => parsed_json['primaryCommonName'] || '',
-  #     'scientificName' => parsed_json['scientificName'] || '',
-  #     'iucn' => parsed_json.dig('iucn', 'iucnDescEn') || 'Not Available',
-  #     'order' => parsed_json.dig('speciesGlobal', 'family') || 'Not Available',
-  #     'family' => parsed_json.dig('speciesGlobal', 'taxorder') || 'Not Available',
-  #     'genus' => parsed_json.dig('speciesGlobal', 'genus') || 'Not Available',
-  #     'barriers' => parsed_json.dig('occurrenceDelineations', 0, 'separationBarriers') || 'Not Available',
-  #     'justification' => parsed_json.dig('occurrenceDelineations', 0, 'separationJustification') || 'Not Available'
-  #   }
-  #   puts response.body
-  #   render json: info
-  #   return
-  # end
-  # end
-
-  # def search ()
-  #   GoogleSearch.api_key = process.env.api_key
-  #   search = GoogleSearch.new(q: "#{primaryCommonName}")
-  # end
-
 
   # GET /animals/1
   def show
