@@ -75,3 +75,4 @@ Git Ignore List:
 config/application.yml
 config/master.key
 *mongoid.yml
+*google_cse_api.rb
