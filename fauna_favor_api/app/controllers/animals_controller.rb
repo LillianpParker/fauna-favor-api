@@ -1,5 +1,5 @@
 require 'faraday'
-require 'google_search_results' 
+# require 'google_search_results' 
 require 'json'
 
 class AnimalsController < ApplicationController
@@ -9,18 +9,18 @@ class AnimalsController < ApplicationController
     $i = 0
     $num = 5
 
-    render json: {
-      "primaryCommonName": "Common Checkered-Skipper",
-      "scientificName": "Pyrgus communis",
-      "iucn": "Not Available",
-      "order": "Hesperiidae",
-      "family": "Lepidoptera",
-      "genus": "Pyrgus",
-      "barriers": "Not Available",
-      "justification": "Most species"
-    }
+    # render json: {
+    #   "primaryCommonName": "Common Checkered-Skipper",
+    #   "scientificName": "Pyrgus communis",
+    #   "iucn": "Not Available",
+    #   "order": "Hesperiidae",
+    #   "family": "Lepidoptera",
+    #   "genus": "Pyrgus",
+    #   "barriers": "Not Available",
+    #   "justification": "Most species"
+    # }
 
-    return
+    # return
 
     while $i < $num do
       response = Faraday.get "https://explorer.natureserve.org/api/data/taxon/ELEMENT_GLOBAL.2.#{random}"
@@ -78,7 +78,6 @@ class AnimalsController < ApplicationController
         'justification' => parsed_json.dig('occurrenceDelineations', 0, 'separationJustification') || 'Not Available'
       }
     }
-
       render json: results
     end
   end
